@@ -1,0 +1,22 @@
+# Development database only. Do not reuse these passwords in production.
+services:
+  mysql:
+    image: mysql:8.4
+    environment:
+      MYSQL_ROOT_PASSWORD: airout_dev_root
+      MYSQL_DATABASE: airout
+      MYSQL_USER: airout
+      MYSQL_PASSWORD: airout_dev_password
+    ports:
+      - "3306:3306"
+    command: ["--character-set-server=utf8mb4", "--collation-server=utf8mb4_unicode_ci"]
+    volumes:
+      - airout_mysql:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-pairout_dev_password"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+volumes:
+  airout_mysql:

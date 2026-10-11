@@ -1,0 +1,15 @@
+node_modules/
+dist/
+.expo/
+.expo-shared/
+npm-debug.log*
+.env
+.env.local
+*.sqlite
+*.sqlite3
+data/
+coverage/
+.DS_Store
+Thumbs.db
+*.tsbuildinfo
+web-build/
