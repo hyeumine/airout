@@ -36,6 +36,8 @@ export function Screen({
   )
   return (
     <View style={[styles.flex, { backgroundColor: colors.bg, paddingTop: safe ? insets.top + 8 : 0 }]}>
+      <View pointerEvents="none" style={[styles.wash, { backgroundColor: colors.lilac }]} />
+      <View pointerEvents="none" style={[styles.washMint, { backgroundColor: colors.mint }]} />
       {body}
       {footer}
     </View>
@@ -62,7 +64,7 @@ export function Title({ children, subtitle }: { children: string; subtitle?: str
 
 export function Card({ children }: { children: React.ReactNode }) {
   const { colors } = useTheme()
-  return <View style={[styles.card, { backgroundColor: colors.surface, borderColor: colors.border }]}>{children}</View>
+  return <View style={[styles.card, styles.shadow, { backgroundColor: colors.surface }]}>{children}</View>
 }
 
 export function Button({
@@ -87,9 +89,10 @@ export function Button({
       onPress={onPress}
       style={({ pressed }) => [
         styles.button,
+        solid ? styles.shadow : null,
         {
-          backgroundColor: solid ? colors.primary : 'transparent',
-          borderColor: quiet ? 'transparent' : colors.primary,
+          backgroundColor: solid ? colors.primary : quiet ? 'transparent' : colors.surface,
+          borderColor: quiet ? 'transparent' : colors.border,
           borderWidth: quiet ? 0 : 1,
           opacity: disabled ? 0.45 : pressed ? 0.85 : 1,
         },
@@ -109,7 +112,7 @@ export function Field(props: TextInputProps & { label: string }) {
       <TextInput
         placeholderTextColor={colors.muted}
         accessibilityLabel={label}
-        style={[styles.input, { color: colors.ink, borderColor: colors.border, backgroundColor: colors.surface }, style]}
+        style={[styles.input, { color: colors.ink, backgroundColor: colors.surfaceMuted }, style]}
         {...rest}
       />
     </View>
@@ -123,7 +126,7 @@ export function Chip({ label, selected, onPress }: { label: string; selected?: b
       accessibilityRole="button"
       accessibilityState={{ selected: Boolean(selected) }}
       onPress={onPress}
-      style={[styles.chip, { backgroundColor: selected ? colors.primary : colors.primarySoft }]}
+      style={[styles.chip, { backgroundColor: selected ? colors.primary : colors.surface, borderColor: selected ? colors.primary : colors.border }]}
     >
       <Text style={{ color: selected ? colors.onPrimary : colors.ink }}>{label}</Text>
     </Pressable>
@@ -133,7 +136,7 @@ export function Chip({ label, selected, onPress }: { label: string; selected?: b
 export function Banner({ children }: { children: string }) {
   const { colors } = useTheme()
   return (
-    <View style={[styles.banner, { backgroundColor: colors.warm, borderColor: colors.border }]}>
+    <View style={[styles.banner, { backgroundColor: colors.warm }]}>
       <Text style={{ color: colors.ink, lineHeight: 20 }}>{children}</Text>
     </View>
   )
@@ -171,17 +174,23 @@ export function Muted({ children }: { children: string }) {
 
 const styles = StyleSheet.create({
   flex: { flex: 1 },
-  scroll: { padding: 18, paddingBottom: 36 },
-  titleBlock: { marginBottom: 14 },
-  h1: { fontSize: 26, fontWeight: '800' },
-  h2: { fontSize: 17, fontWeight: '700', marginBottom: 8 },
-  subtitle: { marginTop: 6, lineHeight: 21 },
-  card: { borderRadius: 20, borderWidth: 1, padding: 16, marginBottom: 12 },
-  button: { minHeight: 48, borderRadius: 14, paddingHorizontal: 16, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
-  field: { marginBottom: 10 },
-  label: { fontWeight: '700', marginBottom: 6 },
-  input: { borderWidth: 1, borderRadius: 14, paddingHorizontal: 14, paddingVertical: 12, minHeight: 48, textAlignVertical: 'top' },
-  chip: { borderRadius: 999, paddingHorizontal: 12, paddingVertical: 10, marginRight: 8, marginBottom: 8 },
-  banner: { borderRadius: 16, borderWidth: 1, padding: 12, marginBottom: 12 },
+  wash: { position: 'absolute', top: -90, right: -50, width: 240, height: 240, borderRadius: 120, opacity: 0.7 },
+  washMint: { position: 'absolute', top: 20, left: -80, width: 200, height: 200, borderRadius: 100, opacity: 0.55 },
+  scroll: { padding: 20, paddingBottom: 40 },
+  titleBlock: { marginBottom: 16 },
+  h1: { fontSize: 32, fontWeight: '800', letterSpacing: -0.6 },
+  h2: { fontSize: 18, fontWeight: '800', marginBottom: 8 },
+  subtitle: { marginTop: 6, lineHeight: 22, fontSize: 15 },
+  card: { borderRadius: 28, padding: 18, marginBottom: 14 },
+  shadow: Platform.select({
+    web: { boxShadow: '0 12px 32px rgba(124, 107, 245, 0.10)' },
+    default: { shadowColor: '#7C6BF5', shadowOpacity: 0.12, shadowRadius: 16, shadowOffset: { width: 0, height: 8 }, elevation: 3 },
+  }),
+  button: { minHeight: 52, borderRadius: 999, paddingHorizontal: 18, alignItems: 'center', justifyContent: 'center', marginTop: 8 },
+  field: { marginBottom: 12 },
+  label: { fontWeight: '700', marginBottom: 8 },
+  input: { borderRadius: 18, paddingHorizontal: 16, paddingVertical: 14, minHeight: 52, textAlignVertical: 'top' },
+  chip: { borderRadius: 999, borderWidth: 1, paddingHorizontal: 14, paddingVertical: 10, marginRight: 8, marginBottom: 8 },
+  banner: { borderRadius: 20, padding: 14, marginBottom: 14 },
   loading: { padding: 24, alignItems: 'center' },
 })

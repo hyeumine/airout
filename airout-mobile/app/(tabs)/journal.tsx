@@ -40,8 +40,10 @@ export default function JournalScreen() {
             const key = `${now.getFullYear()}-${`${now.getMonth() + 1}`.padStart(2, '0')}-${`${day}`.padStart(2, '0')}`
             const has = marked.has(key)
             return (
-              <View key={key} style={{ width: '14.2%', height: 32, alignItems: 'center' }}>
-                <Text style={{ color: has ? colors.primary : colors.muted, fontWeight: has ? '800' : '400' }}>{day}</Text>
+              <View key={key} style={{ width: '14.2%', height: 36, alignItems: 'center' }}>
+                <View style={{ width: 28, height: 28, borderRadius: 14, alignItems: 'center', justifyContent: 'center', backgroundColor: has ? colors.lilac : 'transparent' }}>
+                  <Text style={{ color: has ? colors.primary : colors.muted, fontWeight: has ? '800' : '500' }}>{day}</Text>
+                </View>
               </View>
             )
           })}

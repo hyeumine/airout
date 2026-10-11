@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { router } from 'expo-router'
-import { Alert, Platform } from 'react-native'
+import { Alert, Platform, Text, View } from 'react-native'
 import { Banner, Button, Card, Chip, ErrorNote, Field, Muted, Screen, Title } from '../../src/components/ui'
 import { api, ApiError } from '../../src/services/api'
 import { tokenStorageKind } from '../../src/services/secure'
@@ -8,6 +8,7 @@ import { useAuthStore } from '../../src/store/authStore'
 import { useGuestStore } from '../../src/store/guestStore'
 import { queryClient } from '../../src/lib/queryClient'
 import type { ThemeChoice } from '../../src/types'
+import { useTheme } from '../../src/theme/ThemeProvider'
 
 const THEMES: { id: ThemeChoice; label: string }[] = [
   { id: 'system', label: 'Match device' },
@@ -16,6 +17,7 @@ const THEMES: { id: ThemeChoice; label: string }[] = [
 ]
 
 export default function ProfileScreen() {
+  const { colors } = useTheme()
   const user = useAuthStore((state) => state.user)
   const refreshUser = useAuthStore((state) => state.refreshUser)
   const signOut = useAuthStore((state) => state.signOut)
@@ -71,6 +73,9 @@ export default function ProfileScreen() {
 
   return (
     <Screen safe>
+      <View style={{ width: 72, height: 72, borderRadius: 36, backgroundColor: colors.lilac, alignItems: 'center', justifyContent: 'center', marginBottom: 12 }}>
+        <Text style={{ color: colors.ink, fontSize: 28, fontWeight: '800' }}>{(name || 'A').slice(0, 1).toUpperCase()}</Text>
+      </View>
       <Title subtitle="Your account and your nickname are separate.">Your space</Title>
       {user?.status === 'suspended' ? <Banner>Community posting is paused on this account. You can appeal, and your journal and listener remain available.</Banner> : null}
       <Banner>

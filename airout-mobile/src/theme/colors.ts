@@ -12,29 +12,41 @@ export interface Palette {
   warm: string
   danger: string
   ok: string
+  blush: string
+  mint: string
+  sky: string
+  lilac: string
+  bubble: string
+  onBubble: string
 }
 
 export const lightColors: Palette = {
-  bg: '#F6F3FB',
+  bg: '#F4F7FF',
   surface: '#FFFFFF',
-  surfaceMuted: '#F1EDF8',
-  primary: '#5B4DC7',
+  surfaceMuted: '#F6F3FB',
+  primary: '#7C6BF5',
   onPrimary: '#FFFFFF',
-  primarySoft: '#E6E1FA',
-  ink: '#241F33',
-  muted: '#5E5872',
-  border: '#E4DDF3',
-  blue: '#3D7EA6',
-  warm: '#F8F1E8',
+  primarySoft: '#F0E9FF',
+  ink: '#2C2540',
+  muted: '#746C88',
+  border: '#E7E2F4',
+  blue: '#5B7CDB',
+  warm: '#FFF6EE',
   danger: '#9C3B4A',
   ok: '#2F7D5A',
+  blush: '#F8D5EE',
+  mint: '#DDF6F1',
+  sky: '#D9E6FF',
+  lilac: '#E7DCFF',
+  bubble: '#E9D7FF',
+  onBubble: '#3A2458',
 }
 
 export const darkColors: Palette = {
-  bg: '#161226',
+  bg: '#171326',
   surface: '#241E38',
   surfaceMuted: '#2E2748',
-  primary: '#D4C9FF',
+  primary: '#C9BEFF',
   onPrimary: '#241F33',
   primarySoft: '#3A3260',
   ink: '#F6F3FB',
@@ -44,4 +56,10 @@ export const darkColors: Palette = {
   warm: '#3A332C',
   danger: '#FFB3BE',
   ok: '#9DDEC0',
+  blush: '#4A3454',
+  mint: '#243834',
+  sky: '#2A3550',
+  lilac: '#3A3260',
+  bubble: '#5B4D86',
+  onBubble: '#F6F3FB',
 }

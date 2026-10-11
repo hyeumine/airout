@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { useQuery, useQueryClient } from '@tanstack/react-query'
 import * as Speech from 'expo-speech'
-import { ScrollView, Text, View } from 'react-native'
-import { Banner, Button, Chip, ErrorNote, Field, Muted, Screen, Title } from '../../src/components/ui'
+import { Pressable, ScrollView, Text, TextInput, View } from 'react-native'
+import { Banner, Button, Chip, ErrorNote, Muted, Screen, Title } from '../../src/components/ui'
 import { MODES } from '../../src/content/copy'
 import { formatWhen, localId } from '../../src/lib/format'
 import { api, ApiError } from '../../src/services/api'
@@ -137,14 +137,46 @@ export default function AiScreen() {
       safe
       scroll={false}
       footer={
-        <View style={{ padding: 12, backgroundColor: colors.surface, borderTopWidth: 1, borderTopColor: colors.border }}>
-          <Field label="Message" value={draft} onChangeText={setDraft} placeholder="Tell me what’s on your mind..." multiline style={{ minHeight: 72 }} />
-          <Button label="Send privately" onPress={send} />
+        <View style={{ flexDirection: 'row', alignItems: 'flex-end', gap: 8, paddingHorizontal: 16, paddingTop: 8, paddingBottom: 12, backgroundColor: colors.bg }}>
+          <TextInput
+            accessibilityLabel="Message"
+            value={draft}
+            onChangeText={setDraft}
+            placeholder="Tell me what’s on your mind..."
+            placeholderTextColor={colors.muted}
+            multiline
+            style={{
+              flex: 1,
+              minHeight: 48,
+              maxHeight: 120,
+              borderRadius: 24,
+              paddingHorizontal: 16,
+              paddingVertical: 12,
+              backgroundColor: colors.surface,
+              color: colors.ink,
+            }}
+          />
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Voice input is not connected"
+            onPress={() => setError('Speech to text is not connected in this build.')}
+            style={{ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.surface }}
+          >
+            <Text style={{ color: colors.primary, fontSize: 18 }}>🎤</Text>
+          </Pressable>
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Send privately"
+            onPress={send}
+            style={{ width: 48, height: 48, borderRadius: 24, alignItems: 'center', justifyContent: 'center', backgroundColor: colors.primary }}
+          >
+            <Text style={{ color: colors.onPrimary, fontSize: 18 }}>➤</Text>
+          </Pressable>
         </View>
       }
     >
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: 18, paddingBottom: 24 }}>
-        <Title subtitle="A listening companion, not a therapist or an emergency service.">Your private listening space</Title>
+        <Title subtitle="A listening companion, not a therapist or an emergency service.">AIrOut</Title>
         <Banner>
           {authed
             ? 'Signed-in replies come from the server. Until a model is configured there, they are a practice listener and are marked as simulated.'
@@ -162,7 +194,6 @@ export default function AiScreen() {
           {authed ? <Chip label="Keep until I delete it" selected={consent} onPress={() => setConsent((value) => !value)} /> : null}
           <Chip label={guest.readAloud ? 'Voice replies on' : 'Read replies aloud'} selected={guest.readAloud} onPress={() => guest.setReadAloud(!guest.readAloud)} />
         </View>
-        <Button label="Voice input is not connected" variant="outline" onPress={() => setError('Speech to text is not connected in this build.')} />
         <Button label="New conversation" variant="outline" onPress={startNew} />
         {chosenId ? (
           <Button
@@ -181,13 +212,28 @@ export default function AiScreen() {
             <Chip key={item.id} label={item.title.slice(0, 28)} selected={item.id === chosenId} onPress={() => { setActiveId(item.id); if (!authed) guest.setActive(item.id) }} />
           ))}
         </ScrollView>
-        {messages.map((message) => (
-          <View key={message.id} style={{ alignSelf: message.role === 'user' ? 'flex-end' : 'flex-start', backgroundColor: message.role === 'user' ? colors.primary : colors.primarySoft, borderRadius: 16, padding: 12, marginBottom: 8, maxWidth: '90%' }}>
-            <Text style={{ color: message.role === 'user' ? colors.onPrimary : colors.ink, lineHeight: 21 }}>{message.content}</Text>
-            <Text style={{ color: message.role === 'user' ? colors.onPrimary : colors.muted, fontSize: 11, marginTop: 6 }}>{formatWhen(message.createdAt)}</Text>
+        {messages.map((message) => {
+          const mine = message.role === 'user'
+          return (
+            <View key={message.id} style={{ flexDirection: mine ? 'row-reverse' : 'row', alignItems: 'flex-end', marginBottom: 10, gap: 8 }}>
+              <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: mine ? colors.blush : colors.lilac, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: colors.ink, fontSize: 12, fontWeight: '800' }}>{mine ? (guest.alias || 'Y').slice(0, 1).toUpperCase() : '✦'}</Text>
+              </View>
+              <View style={{ maxWidth: '78%', backgroundColor: mine ? colors.bubble : colors.surface, borderRadius: 22, borderBottomRightRadius: mine ? 6 : 22, borderBottomLeftRadius: mine ? 22 : 6, paddingHorizontal: 14, paddingVertical: 12 }}>
+                <Text style={{ color: mine ? colors.onBubble : colors.ink, lineHeight: 22 }}>{message.content}</Text>
+                <Text style={{ color: colors.muted, fontSize: 11, marginTop: 6 }}>{formatWhen(message.createdAt)}</Text>
+              </View>
+            </View>
+          )
+        })}
+        {typing ? (
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+            <View style={{ width: 28, height: 28, borderRadius: 14, backgroundColor: colors.lilac, alignItems: 'center', justifyContent: 'center' }}>
+              <Text>✦</Text>
+            </View>
+            <Muted>AIrOut is listening…</Muted>
           </View>
-        ))}
-        {typing ? <Muted>AIrOut is listening…</Muted> : null}
+        ) : null}
         {safetyResources.map((item) => (
           <Muted key={item.url}>{`${item.name}: ${item.contact}`}</Muted>
         ))}

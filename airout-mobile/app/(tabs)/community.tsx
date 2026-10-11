@@ -92,8 +92,18 @@ export default function CommunityScreen() {
         const hidden = Boolean(post.contentWarning) && !openWarnings[post.id]
         return (
           <Card key={post.id}>
-            <Text style={{ color: colors.primary, fontWeight: '700' }}>{`${post.displayName} · ${labelFor(CATEGORIES, post.category)}`}</Text>
-            <Text style={{ color: colors.muted, fontSize: 12, marginTop: 4 }}>{formatWhen(post.createdAt)}</Text>
+            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
+              <View style={{ width: 40, height: 40, borderRadius: 20, backgroundColor: colors.lilac, alignItems: 'center', justifyContent: 'center' }}>
+                <Text style={{ color: colors.ink, fontWeight: '800' }}>{post.displayName.slice(0, 1).toUpperCase()}</Text>
+              </View>
+              <View style={{ flex: 1 }}>
+                <Text style={{ color: colors.ink, fontWeight: '800' }}>{post.displayName}</Text>
+                <Text style={{ color: colors.muted, fontSize: 12 }}>{formatWhen(post.createdAt)}</Text>
+              </View>
+            </View>
+            <View style={{ alignSelf: 'flex-start', backgroundColor: colors.primarySoft, borderRadius: 999, paddingHorizontal: 10, paddingVertical: 6, marginTop: 10 }}>
+              <Text style={{ color: colors.primary, fontSize: 12, fontWeight: '700' }}>{labelFor(CATEGORIES, post.category)}</Text>
+            </View>
             {hidden ? (
               <Button label={`Content note: ${post.contentWarning}. Show post`} variant="outline" onPress={() => setOpenWarnings((value) => ({ ...value, [post.id]: true }))} />
             ) : (

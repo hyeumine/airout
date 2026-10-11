@@ -1,13 +1,13 @@
 import type { Category, CommentKind, Mode, Mood, Reaction } from '../types'
 
-export const MOODS: { id: Mood; label: string }[] = [
-  { id: 'happy', label: 'Happy' },
-  { id: 'calm', label: 'Calm' },
-  { id: 'neutral', label: 'Neutral' },
-  { id: 'sad', label: 'Sad' },
-  { id: 'anxious', label: 'Anxious' },
-  { id: 'frustrated', label: 'Frustrated' },
-  { id: 'exhausted', label: 'Exhausted' },
+export const MOODS: { id: Mood; label: string; face: string; tint: string }[] = [
+  { id: 'happy', label: 'Happy', face: '😊', tint: '#FFE4EE' },
+  { id: 'calm', label: 'Calm', face: '😌', tint: '#DDF6F1' },
+  { id: 'neutral', label: 'Neutral', face: '😐', tint: '#F3E8FF' },
+  { id: 'sad', label: 'Sad', face: '😔', tint: '#E4ECFF' },
+  { id: 'anxious', label: 'Anxious', face: '😟', tint: '#FFF1D6' },
+  { id: 'frustrated', label: 'Frustrated', face: '😣', tint: '#FDE2E4' },
+  { id: 'exhausted', label: 'Exhausted', face: '😴', tint: '#E8E4F8' },
 ]
 
 export const CATEGORIES: { id: Category; label: string }[] = [
